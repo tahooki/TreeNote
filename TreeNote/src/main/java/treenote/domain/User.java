@@ -1,7 +1,7 @@
 package treenote.domain;
 
 public class User {
-	private String userNo;
+	private int userNo;
 	private String email;
 	private String password;
 	private String name;
