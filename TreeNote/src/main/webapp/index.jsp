@@ -7,21 +7,21 @@
 
 <!-- 라이브러리 -->
 
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/go.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="resources/js/jquery.min.js"></script>
+<script src="resources/js/jquery-ui.min.js"></script>
+<script src="resources/js/go.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="css/jquery-ui.min.css">	
-<link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/jquery-ui.min.css">	
+<link rel="stylesheet" href="resources/css/bootstrap.css">
+<link rel="stylesheet" href="resources/css/bootstrap.min.css">
 
 <!-- 개발 부분 -->
 
-<script src="js/goImpl.js"></script>
-<script src="js/jQueryImpl.js"></script>
+<script src="resources/js/goImpl.js"></script>
+<script src="resources/js/jQueryImpl.js"></script>
 
-<link rel="stylesheet" href="css/tree.css">
+<link rel="stylesheet" href="resources/css/tree.css">
 
 <!-- 개발 부분 -->
 
@@ -43,7 +43,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<img id="tree" src="img/tree2.png" width="40px" height="40px"
+				<img id="tree" src="resources/img/tree2.png" width="40px" height="40px"
 					style="margin: 5px;">
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
