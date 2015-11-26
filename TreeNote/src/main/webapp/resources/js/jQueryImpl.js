@@ -3,7 +3,8 @@ function jqueryImpl() {
 		$("#navbar").show("slide", {
 			direction : "up"
 		}, 1000);
-		$("#loginContainer").hide("fade", 1000);
+		$("#loginContainer").css("display","none");
+		$('#treeContainer').css('display','block');
 		$("#timeline").delay(1000).show("slide", {
 			direction : "right"
 		}, 500);
@@ -43,6 +44,21 @@ function jqueryImpl() {
 }
 
 function json(data){
+	
+}
+//페이스북 로그인 버트 클릭시 이벤
+function facebookLogin(){
+	
+		$("#navbar").show("slide", {
+			direction : "up"
+		}, 1000);
+		$("#loginContainer").css("display","none");
+		$('#treeContainer').css('display','block');
+		$("#timeline").delay(1000).show("slide", {
+			direction : "right"
+		}, 500);
+		$("#base").delay(1000).show("fade", 500);
+		setTimeout("goImpl()", 2000);
 	
 }
 
