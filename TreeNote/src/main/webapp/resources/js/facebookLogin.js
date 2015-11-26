@@ -7,6 +7,11 @@
     });
   }
 
+  
+  function loginCheck(snsUserId){
+	  
+  }
+  
 
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -19,10 +24,11 @@
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
        console.log('로그인 확인 ');
+//       console.log(response.email);
         //console.log(response); // dump complete info
-        access_token = response.authResponse.accessToken; //get access token
-        user_id = response.authResponse.userID; //get FB UID
-        
+        var access_token = response.authResponse.accessToken; //get access token
+        var user_id = response.authResponse.userID; //get FB UID
+       
        
         
     } else if (response.status === 'not_authorized') {
@@ -31,6 +37,7 @@
       // 페이스북을 통한 회원가입 창 유도
       // document.getElementById('status').innerHTML = 'Please log ' +
       //   'into this app.';
+    	alert("로그인 해")
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
@@ -55,9 +62,7 @@
 
           }
       }, {
-          scope: 'public_profile,user_friends,email,user_about_me,user_actions.books,user_actions.fitness,user_actions.music,user_actions.news,user_actions.video,user_birthday,user_events,user_hometown,user_likes,user_location,user_managed_groups,user_photos,user_posts,user_relationships,user_religion_politics,user_tagged_places,user_videos,user_website,user_work_history,read_custom_friendlists,read_insights,read_audience_network_insights,read_page_mailboxes,manage_pages,publish_pages,publish_actions,rsvp_event,pages_show_list,pages_manage_cta,pages_manage_leads'
-          
-
+          scope: 'public_profile,email,user_about_me'
       });
     }
   }
@@ -78,7 +83,7 @@
 
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '1098884940124016',
+    appId      : '782182438593577',
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
@@ -102,7 +107,43 @@
   });
 
   };
-
+  
+function login(){
+	
+	FB.login(function(response) {
+		if (response.authResponse) {
+//          console.log('로그인 되었습니다.');
+			//console.log(response); // dump complete info
+			var pageAccessToken = response.authResponse.accessToken; //get access token
+			var user_id = response.authResponse.userID; //get FB UID
+			var user_email=null;
+			
+			FB.api('https://graph.facebook.com/v2.5/me?fields=id%2Cname%2Cemail&access_token='+pageAccessToken, 
+					function(response) {
+				console.log(response.email);
+				userEmail = response.email; //get user email
+				snsUserId = response.id;
+				userName = response.name
+				console.log(response);
+				
+				// you can store this data into your database             
+			});
+			facebookLogin();
+//			location.href='/user/login?email='+userEmail+'&snsUserId='+snsUserId;
+			
+		} else {
+			//user hit cancel button
+			console.log('User cancelled login or did not fully authorize.');
+			
+		}
+	}, {
+		scope: 'public_profile,email,user_about_me'
+	});
+	
+	
+	
+}
+  
 
 
 // $(document).ready(function() {
