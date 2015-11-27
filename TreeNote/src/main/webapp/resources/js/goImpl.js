@@ -1,15 +1,12 @@
 
-
-
-
 function goImpl() {
 	// if (window.goSamples) goSamples();
 	//json data를 서버에서 호출후 map 생성
 	var jsondata = jQuery.getJSON('jsonTest.jsp',function(success){
-		var $ = go.GraphObject.make; // for conciseness in defining templates
+		var gojs = go.GraphObject.make; // for conciseness in defining templates
 		
 		myDiagram = // 아직 분석 안됨.
-			$(go.Diagram, "myDiagram", // div의 이름이 "myDiagram"인 것을 찾아 설정함.
+			gojs(go.Diagram, "myDiagram", // div의 이름이 "myDiagram"인 것을 찾아 설정함.
 					{
 				"toolManager.mouseWheelBehavior" : go.ToolManager.WheelZoom, // 마우스
 				// 속성
@@ -21,7 +18,7 @@ function goImpl() {
 				initialAutoScale : go.Diagram.Uniform, // 화면 정렬 타입
 				// contentAlignment: go.Spot.Center, // 화면을 가운데로 적용해서 움직이지 않게 함.
 				initialContentAlignment : go.Spot.Center, // 안에 들어있는 노드를 가운데로 정렬시킴
-				layout : $(go.ForceDirectedLayout), // layout 종류.
+				layout : gojs(go.ForceDirectedLayout), // layout 종류.
 				// moving and copying nodes also moves and copies their subtrees
 				"commandHandler.copiesTree" : true, // for the copy command
 				"commandHandler.deletesTree" : true, // for the delete command
@@ -34,7 +31,7 @@ function goImpl() {
 		// Define the Node template.
 		// This uses a Spot Panel to position a button relative
 		// to the ellipse surrounding the text.
-		myDiagram.nodeTemplate = $(go.Node, "Spot", {
+		myDiagram.nodeTemplate = gojs(go.Node, "Spot", {
 			selectionObjectName : "PANEL", // ??
 			isTreeExpanded : false, // 노드의 펼쳐지는 것을 설정하는 부분. 기본이ㅏ false로 해놓으면 펼쳐지지
 			// 않는다.
@@ -42,9 +39,9 @@ function goImpl() {
 			// 자식노드를 생성하지 못하게 만든다.?
 		},
 		// the node's outer shape, which will surround the text
-		$(go.Panel, "Auto", {
+		gojs(go.Panel, "Auto", {
 			name : "PANEL"
-		}, $(go.Shape, "Circle", // 노드의 모양을 정함.
+		}, gojs(go.Shape, "Circle", // 노드의 모양을 정함.
 				{
 			fill : "whitesmoke",
 			stroke : "black",
@@ -54,7 +51,7 @@ function goImpl() {
 				setKeyword(obj.part.data);
 			}
 				}, // 기본색이 whitsmoke 인듯... stroke는
-				new go.Binding("fill", "color")), $(go.TextBlock, {	
+				new go.Binding("fill", "color")), gojs(go.TextBlock, {	
 					font : "12pt sans-serif",
 					editable : true,
 					margin : 2,
@@ -65,7 +62,7 @@ function goImpl() {
 				// property중 name이라는 것을 선택.
 		),
 		// the expand/collapse button, at the top-right corner
-		$("TreeExpanderButton", {
+		gojs("TreeExpanderButton", {
 			alignment : go.Spot.TopRight, // +- 오른쪽 상단에 배치
 			alignmentFocus : go.Spot.Center,
 			// customize the expander behavior to
@@ -95,7 +92,7 @@ function goImpl() {
 				diagram.commitTransaction("CollapseExpandTree"); // startTransaction
 			}
 		}), // end TreeExpanderButton
-		$(go.Picture, {
+		gojs(go.Picture, {
 			alignment : go.Spot.TopLeft,
 			maxSize : new go.Size(15, 15),
 			source : "img/tree1.png",
