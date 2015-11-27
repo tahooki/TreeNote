@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 
 
-<!-- 
 { "class": "go.TreeModel",
   "nodeDataArray": [ 
 {"key":0, "name":"동물", "color":"lightgreen", "everExpanded":true},
@@ -35,4 +34,4 @@
 {"key":27, "name":"키워드", "parent":9, "color":"#91f79d"},
 {"key":28, "name":"키워드", "parent":9, "color":"#f3f69e"}
  ]}
- -->
+ 
