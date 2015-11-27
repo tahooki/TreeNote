@@ -7,6 +7,7 @@ public class User {
 	private String name;
 	private String phone;
 	private String photo;
+	private String snsUser;
 
 	public int getUserNo() {
 		return userNo;
@@ -56,9 +57,22 @@ public class User {
 		this.photo = photo;
 	}
 
+	
+
+	public String getSnsUser() {
+		return snsUser;
+	}
+
+	public void setSnsUser(String snsUser) {
+		this.snsUser = snsUser;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userNo=" + userNo + ", email=" + email + ", password=" + password + ", name=" + name + ", phone="
-				+ phone + ", photo=" + photo + "]";
+				+ phone + ", photo=" + photo + ", snsUser=" + snsUser + "]";
 	}
+	
+	
+	
 }

@@ -27,8 +27,8 @@
 	</context:component-scan>
 
 	<!-- :: ViewResolver 선언 -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
+<!-- 	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver" /> -->
 
 	<!-- ■ / 형식의 Mapping 은 모든(정적,동적 자원) 요청시 처리책임 ■ 정적자원 요청시 DispatcherServlet 
 		에게 처리방법지정 ■ 정적자원요청 (아래의 URI 포함 요청)시 처리 경로 location 지정 실제 PJT 진행시 일반적으로 resources 
