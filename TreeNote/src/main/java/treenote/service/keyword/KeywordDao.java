@@ -10,12 +10,17 @@ public interface KeywordDao {
 	//수정
 	public int updateKeyword(Keyword keyword) throws Exception;
 	//삭제
-	public void removeKeyword(Keyword Keyword) throws Exception;
+	public void removeKeyword(Keyword keyword) throws Exception;
+	//해당 트리 리스트 불러오기
+	public List<Keyword> listTreeKeyword(int treeNo) throws Exception;
 	//해당 키워드 리스트 불러오기
-	public List<Keyword> listKeyword(String keyword) throws Exception;
+	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception;
 	//복사
 	public Keyword copyKeyword(Keyword keyword) throws Exception; 
-	//키워드 불러오기
+	//자식 키워드 불러오기
+	public List<Keyword> listChildKeyword(int keywordNo) throws Exception;
+	
 	public Keyword getKeyword(int keywordNo) throws Exception;
 	
+	public int getKeywrodNo() throws Exception;
 }

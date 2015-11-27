@@ -30,25 +30,31 @@ public class KeywordDaoImpl implements KeywordDao {
 	@Override
 	public void addKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-
+		sqlSession.insert("keywordMapper.addKeyword", keyword);
 	}
 
 	@Override
 	public int updateKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.update("keywordMapper.updateKeyword", keyword);
 	}
 
 	@Override
-	public void removeKeyword(Keyword Keyword) throws Exception {
+	public void removeKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-
+		sqlSession.delete("keywordMapper.removeKeyword", keyword.getKeywordNo());
 	}
 
 	@Override
-	public List<Keyword> listKeyword(String keyword) throws Exception {
+	public List<Keyword> listTreeKeyword(int treeNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("keywordMapper.listTreeKeyword", treeNo);
+	}
+
+	@Override
+	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("keywordMapper.listTimeLineKeyword", keyword);
 	}
 
 	@Override
@@ -58,9 +64,22 @@ public class KeywordDaoImpl implements KeywordDao {
 	}
 
 	@Override
-	public Keyword getKeyword(int keywordNo) throws Exception {
+	public List<Keyword> listChildKeyword(int keywordNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("keywordMapper.listTimeLineKeyword", keywordNo);
 	}
 
+	@Override
+	public Keyword getKeyword(int keywordNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("keywordMapper.getKeyword", keywordNo);
+	}
+
+	@Override
+	public int getKeywrodNo() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("??");
+		return sqlSession.selectOne("keywordMapper.getKeywordNo");
+	}
+	
 }

@@ -37,39 +37,47 @@ public class KeywordServiceImpl implements KeywordService {
 	}
 
 	@Override
-	public void addKeyword(Keyword keyword) throws Exception {
+	public Keyword addKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-
+		int keywordNo = keywordDao.getKeywrodNo();
+		//int keywordNo = keyword.getKeywordNo();
+		keyword.setKeywordNo(keywordNo);
+		keywordDao.addKeyword(keyword);
+		return keywordDao.getKeyword(keywordNo);
 	}
 
 	@Override
 	public int updateKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return keywordDao.updateKeyword(keyword);
 	}
 
 	@Override
-	public void removeKeyword(Keyword Keyword) throws Exception {
+	public void removeKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-
+		//키워드 자식 삭제
+		//키워드 내용 삭제
+		//키워드 삭제
+		keywordDao.removeKeyword(keyword);
 	}
 
 	@Override
-	public List<Keyword> listKeyword(String keyword) throws Exception {
+	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return keywordDao.listTimeLineKeyword(keyword);
 	}
 
 	@Override
-	public List<Keyword> listChildKeyword(Keyword keyword) throws Exception {
+	public List<Keyword> listChildKeyword(int keywordNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		//String listChildNo =
+		return keywordDao.listChildKeyword(keywordNo);
 	}
 
 	@Override
 	public Keyword copyKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return keywordDao.copyKeyword(keyword);
 	}
 
 }
