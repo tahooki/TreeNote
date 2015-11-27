@@ -1,5 +1,7 @@
 package treenote.service.tree.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -46,30 +48,43 @@ public class TreeServiceImpl implements TreeService {
 	@Override
 	public void addTree(Tree tree) throws Exception {
 		// TODO Auto-generated method stub
-
+		System.out.println("Service.addTree::");
+		
+		treeDao.addTree(tree);
 	}
 
 	@Override
-	public int updateTitle(String title) throws Exception {
+	public int updateTitle(Tree tree) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("Service.updateTitle::");
+		
+		treeDao.updateTitle(tree);
 		return 0;
 	}
 
 	@Override
 	public void removeTree(int treeNo) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("Service.removeTree::");
+		
+		treeDao.removeTree(treeNo);
+	}
+
+	@Override
+	public Tree getTree(int treeNo) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("Service.getTree::");
+		
+		return treeDao.getTree(treeNo);
 
 	}
 
 	@Override
-	public void getTree(int treeNo) throws Exception {
+	public List<Tree> listTree(int userNo) throws Exception {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void listTree(int userNo) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("Service.listTree::");
+		
+		return treeDao.listTree(userNo);
 
 	}
 

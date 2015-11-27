@@ -3,7 +3,7 @@ package treenote.domain;
 public class Tree {
 	private int treeNo;
 	private int userNo;
-	private String Title;
+	private String title;
 
 	public int getTreeNo() {
 		return treeNo;
@@ -20,17 +20,18 @@ public class Tree {
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
+	
 
 	public String getTitle() {
-		return Title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
 
 	@Override
 	public String toString() {
-		return "Tree [treeNo=" + treeNo + ", userNo=" + userNo + ", Title=" + Title + "]";
+		return "Tree [treeNo=" + treeNo + ", userNo=" + userNo + ", Title=" + title + "]";
 	}
 }
