@@ -15,7 +15,6 @@ import treenote.service.tree.TreeService;
 @Controller
 @RequestMapping("/tree/*")
 public class TreeController {
-
 	/// Field
 	@Autowired
 	@Qualifier("treeServiceImpl")
@@ -36,18 +35,22 @@ public class TreeController {
 		
 	}
 	
-	
 	//제목수정
-	@RequestMapping(value = "updateTitle/{title}")
-	public void updateTitle(@PathVariable String title, Model model) throws Exception{
+	@RequestMapping(value = "updateTitle")
+	public void updateTitle(@RequestBody Tree tree, Model model) throws Exception{
 		System.out.println("/updateTitle");
+		
+		treeService.updateTitle(tree);
+		model.addAttribute("tree", tree);
+		
 	}
-	
 	
 	//삭제
 	@RequestMapping(value = "removeTree/{treeNo}")
 	public void removeTree(@PathVariable int treeNo, Model model) throws Exception{
 		System.out.println("/removeTree");
+		
+		treeService.removeTree(treeNo);
 	}
 	
 	

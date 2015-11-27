@@ -28,12 +28,13 @@
 			</where>	
 	</update>
 	
-	 
+	
 	<select id="getTree" parameterType="tree" resultMap="treeSelectMap">
 		SELECT
-			tree_no, user_no, Title
-			FROM trees
-		<where> tree_no=#{treeNo} </where>
+			t.tree_no, t.user_no, t.Title, k.keyword
+			FROM trees t, keywords k
+		<where> t.tree_no=#{treeNo} AND t.tree_no = k.tree_no </where>
+		ORDER BY user_no
 	</select>
 	
 	

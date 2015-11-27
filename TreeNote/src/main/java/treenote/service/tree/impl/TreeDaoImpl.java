@@ -60,7 +60,7 @@ public class TreeDaoImpl implements TreeDao {
 		// TODO Auto-generated method stub
 		System.out.println("Dao.getTree::");
 		
-		return sqlSession.selectOne("TreeMapper.getTree", treeNo);
+		return null;
 
 	}
 
