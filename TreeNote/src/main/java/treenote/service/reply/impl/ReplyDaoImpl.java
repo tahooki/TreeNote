@@ -30,25 +30,32 @@ public class ReplyDaoImpl implements ReplyDao {
 	@Override
 	public void addReply(Reply reply) throws Exception {
 		// TODO Auto-generated method stub
-		
+		sqlSession.insert("ReplyMapper.addReply", reply);
 	}
 
 	@Override
 	public void updateReply(Reply reply) throws Exception {
 		// TODO Auto-generated method stub
-		
+		sqlSession.update("ReplyMapper.updateReply", reply);
 	}
 
 	@Override
 	public void removeReply(int replyNo) throws Exception {
 		// TODO Auto-generated method stub
-		
+		sqlSession.delete("ReplyMapper.deleteRelpy", replyNo);
 	}
 
 	@Override
 	public List<Reply> listReply(int contentNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("ReplyMapper.getRelpyList", contentNo);
 	}
+
+	@Override
+	public int ReplytotalCount(int contentNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("ReplyMapper.getTotalReply", contentNo);
+	}
+	
 	
 }

@@ -4,5 +4,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd.mybatis-3-config.dtd">
 
 <mapper namespace="ReplyMapper">
-
+	<resultMap id="relpySelectMap" type="reply">
+		<result property="replyNo" 			column="reply_no" 			jdbcType="INTEGER"/>
+		<result property="userNo"	column="user_no" 		jdbcType="INTEGER" />
+		<result property="contentNo" 	column="content_no" 		jdbcType="INTEGER" />
+		<result property="reply" 				column="reply" 					jdbcType="VARCHAR" />
+		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addReply"		parameterType="reply" >
+	 	INSERT
+		INTO replys( reply_no , user_no , content_no , reply , reg_date) 
+		VALUES	 (	seq_replys_reply_no.nextval,
+				    #{userNo} , #{contentNo} , 
+				    #{reply}, SYSDATE )
+	 </insert>
+	
+	 <!-- SQL : UPDATE -->
+	 <update	id="updateReply"	parameterType="reply" >
+	   	UPDATE replys
+	   	<set>
+	   		reply 	= #{reply} ,			
+			reg_date				=	SYSDATE
+	   	</set>
+	   	WHERE reply_no = #{replyNo}
+	 </update>
+	 
+	 <!-- SQL : DELETE -->
+	 <delete 	id="deleteRelpy"  parameterType="int">
+		DELETE
+		FROM replys
+		WHERE reply_no=#{value}											
+  	</delete> 
+  	
+  	<!-- SQL : SELECT LIST --> 
+  	<select  id="getRelpyList"  parameterType="int"	resultMap="relpySelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	SELECT reply_no , user_no , content_no , reply , reg_date
+										FROM replys 	
+										WHERE content_no = #{value}
+										ORDER BY reply_no ) inner_table
+						WHERE ROWNUM &lt;= 10 )
+		WHERE row_seq BETWEEN 1 AND 10 	  	
+	 </select>
+  	
+  	<!-- SQL : SELECT ROW Count -->	 
+	 <select  id="getTotalReply"  parameterType="int"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT reply_no , user_no , content_no , reply , reg_date
+					   FROM replys		   
+					   WHERE content_no = #{value}
+					   ) countTable						
+	 </select>
 </mapper>

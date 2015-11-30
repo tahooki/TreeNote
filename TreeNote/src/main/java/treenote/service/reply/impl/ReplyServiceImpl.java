@@ -30,25 +30,31 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public void addReply(Reply reply) throws Exception {
 		// TODO Auto-generated method stub
-		
+		replyDao.addReply(reply);
 	}
 
 	@Override
 	public void updateReply(Reply reply) throws Exception {
 		// TODO Auto-generated method stub
-		
+		replyDao.updateReply(reply);
 	}
 
 	@Override
 	public void removeReply(int replyNo) throws Exception {
 		// TODO Auto-generated method stub
-		
+		replyDao.removeReply(replyNo);
 	}
 
 	@Override
 	public List<Reply> listReply(int contentNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return replyDao.listReply(contentNo);
+	}
+
+	@Override
+	public int ReplytotalCount(int contentNo) throws Exception {
+		// TODO Auto-generated method stub
+		return replyDao.ReplytotalCount(contentNo);
 	}
 
 	

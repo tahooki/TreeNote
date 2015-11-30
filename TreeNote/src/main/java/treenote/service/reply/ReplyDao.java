@@ -13,4 +13,6 @@ public interface ReplyDao {
 	public void removeReply(int replyNo) throws Exception;
 	//댓글리스트
 	public List<Reply> listReply(int contentNo) throws Exception;
+	//총 댓글 수 
+	public int ReplytotalCount(int contentNo) throws Exception;
 }
