@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.google.gson.JsonObject;
+
 import treenote.domain.User;
 import treenote.service.user.UserService;
 
@@ -28,8 +31,20 @@ public class UserController {
 
 	//로그인
 	@RequestMapping(value = "login")
-	public void login(@RequestBody User user, HttpSession session) throws Exception {
+	public void login(@RequestBody User user, Model model, HttpSession session) throws Exception {
 		System.out.println("/login");
+		User returnUser = userService.loginUser(user);
+		
+		if(user.getEmail().equals(returnUser.getEmail())&&user.getPassword().equals(returnUser.getPassword())){
+			session.setAttribute("user", returnUser);
+			model.addAttribute(true);
+		}else{
+			model.addAttribute(false);
+		}
+		JsonObject obj = new JsonObject();
+		
+		
+				
 	}
 
 	//로그아웃
