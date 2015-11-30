@@ -25,6 +25,7 @@ public class test {
 	@Qualifier("treeServiceImpl")
 	private TreeService treeService;
 	
+	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
@@ -76,7 +77,7 @@ public class test {
 						
 	}
 	
-	//@Test
+	@Test
 	public void testGetTree() throws Exception {
 		Tree tree=new Tree();
 				
@@ -84,13 +85,13 @@ public class test {
 	
 		System.out.println("JunitTest: testGetTree"+tree);
 		
-		tree = treeService.getTree(treeNo);
+		//tree = treeService.getTree(treeNo);
 		
 		Assert.assertNotNull(tree);
 						
 	}
 	
-	@Test
+	//@Test
 	public void testListTree() throws Exception {
 		Tree tree=new Tree();
 				

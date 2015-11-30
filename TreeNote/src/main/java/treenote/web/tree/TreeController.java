@@ -58,6 +58,8 @@ public class TreeController {
 	@RequestMapping(value = "listFriend/{treeNo}")
 	public void getTree(@PathVariable int treeNo, Model model) throws Exception{
 		System.out.println("/getTree");
+				
+		
 	}
 	
 	
