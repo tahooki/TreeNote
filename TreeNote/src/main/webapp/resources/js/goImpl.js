@@ -2,7 +2,9 @@
 function goImpl() {
 	// if (window.goSamples) goSamples();
 	//json data를 서버에서 호출후 map 생성
-	var jsondata = jQuery.getJSON('jsonTest.jsp',function(success){
+	
+	var jsondata = jQuery.getJSON('http://192.168.0.63:8080/tree/getTree/1000000',function(success){
+		console.log(success);
 		var gojs = go.GraphObject.make; // for conciseness in defining templates
 		
 		myDiagram = // 아직 분석 안됨.
@@ -35,9 +37,20 @@ function goImpl() {
 			selectionObjectName : "PANEL", // ??
 			isTreeExpanded : false, // 노드의 펼쳐지는 것을 설정하는 부분. 기본이ㅏ false로 해놓으면 펼쳐지지
 			// 않는다.
-			isTreeLeaf : false
+			isTreeLeaf : false,
 			// 자식노드를 생성하지 못하게 만든다.?
+			click:function(e, obj){
+				console.log(myDiagram.model.getCategoryForNodeData(obj.part.data));
+				setKeyword(obj.part.data);
+			}
 		},
+		new go.Binding("isShadowed", "isSelected").ofObject(),
+        {
+	          selectionAdorned: false,
+	          shadowOffset: new go.Point(0, 0),
+	          shadowBlur: 15,
+	          shadowColor: "blue",
+	    },
 		// the node's outer shape, which will surround the text
 		gojs(go.Panel, "Auto", {
 			name : "PANEL"
@@ -46,19 +59,15 @@ function goImpl() {
 			fill : "whitesmoke",
 			stroke : "black",
 			strokeWidth : 2,
-			click:function(e, obj){
-				console.log(myDiagram.model.getCategoryForNodeData(obj.part.data));
-				setKeyword(obj.part.data);
-			}
-				}, // 기본색이 whitsmoke 인듯... stroke는
-				new go.Binding("fill", "color")), gojs(go.TextBlock, {	
-					font : "12pt sans-serif",
-					editable : true,
-					margin : 2,
-					isMultiline : false,
-					wrap: go.TextBlock.WrapFit
-				}, // 폰트, margin, 텍스트 박스 수정가능을 설정.
-				new go.Binding("text", "name")) // 노드에 표시되는 텍스트를 data에서 선택하는부분.. data의
+			}, // 기본색이 whitsmoke 인듯... stroke는
+			new go.Binding("fill", "color")), gojs(go.TextBlock, {	
+				font : "12pt sans-serif",
+				editable : true,
+				margin : 2,
+				isMultiline : false,
+				wrap: go.TextBlock.WrapFit
+			}, // 폰트, margin, 텍스트 박스 수정가능을 설정.
+			new go.Binding("text", "keyword"))// 노드에 표시되는 텍스트를 data에서 선택하는부분.. data의
 				// property중 name이라는 것을 선택.
 		),
 		// the expand/collapse button, at the top-right corner
@@ -76,10 +85,10 @@ function goImpl() {
 				diagram.startTransaction("	"); // 트랜젝션 시작... 중간에 오류가 나거나하면 롤백됨.
 				// this behavior is specific to this incrementalTree sample:
 				var data = node.data;
-				if (!data.everExpanded) { // data에 everExpanded이 false이거나 없으면...
+				if (data.collapse==0) { // data에 everExpanded이 false이거나 없으면...
 					// only create children once per node
 					// data array에 everExpeanded 라는 property 추가하고 그걸 true
-					diagram.model.setDataProperty(data, "everExpanded", true);
+					diagram.model.setDataProperty(data, "collapse", 1);
 					var numchildren = createSubTree(data); // 트리생성
 					if (numchildren === 0) { // 자식이 없으면 +- 버튼을 안보이게 만듬.
 						obj.visible = false;
@@ -95,7 +104,7 @@ function goImpl() {
 		gojs(go.Picture, {
 			alignment : go.Spot.TopLeft,
 			maxSize : new go.Size(15, 15),
-			source : "img/tree1.png",
+			source : "resources/img/tree1.png",
 			click : function(e, obj) {
 				// openDialog();
 				obj.visible = false;
@@ -108,13 +117,13 @@ function goImpl() {
 		
 		// create the model with a root node data
 		myDiagram.model = new go.TreeModel([ // 트리모델로 설정
-		                                     {
-		                                    	 key : 0,
-		                                    	 name : "키워드",
-		                                    	 color : "lightgreen",
-		                                    	 everExpanded : false
-		                                     } // 초기 토드 추가
-		                                     ]);
+	     {
+	    	 key : 0,
+	    	 keyword : "키워드",
+	    	 color : "lightgreen",
+	    	 collapse : 0
+	     } // 초기 토드 추가
+	     ]);
 		/*
 		 * myDiagram.model = new go.TreeModel([ { key: 0, color: "lightgreen",
 		 * everExpanded: false } ]);
@@ -129,13 +138,10 @@ function goImpl() {
 		
 		
 		
-		
-		
-		
 		myDiagram.model = go.Model
 //			.fromJson(document.getElementById("treeData").value);
-		.fromJson(JSON.stringify(success))
-		console.log(JSON.stringify(success));
+		.fromJson(success.Tree)
+//		console.log((success));
 		
 		myDiagram.model.addChangedListener(function(e) { // changeListener...
 			
@@ -159,8 +165,6 @@ function goImpl() {
 		myDiagram.toolManager.textEditingTool.defaultTextEditor = createInput();
 	})
 	
-	
-	
 }
 
 // This dynamically creates the immediate children for a node.
@@ -168,7 +172,9 @@ function goImpl() {
 // for a node until we look for them the first time, which happens
 // upon the first tree-expand of a node.
 function createSubTree(parentdata) { // 노드를 생성하는 부분.
-	var numchildren = Math.floor(1); // 노드 갯수 랜덤으로 뽑음.
+
+	var numchildren = 1; // 노드 갯수 랜덤으로 뽑음.
+
 	if (myDiagram.nodes.count <= 1) {
 		numchildren += 1; // make sure the root node has at least one child
 	}
@@ -178,8 +184,9 @@ function createSubTree(parentdata) { // 노드를 생성하는 부분.
 	for (var i = 0; i < numchildren; i++) {
 		var childdata = { // 데이터를 설정하는 부분인데 key value로 내맘대로 추가 할 수 있다.
 			key : model.nodeDataArray.length,
-			name : "키워드",
+			keyword : "키워드",
 			parent : parentdata.key,
+			collapse : 0,
 			color : go.Brush.randomColor()
 		};
 		// add to model.nodeDataArray and create a Node
@@ -205,7 +212,7 @@ function createSubTree(parentdata) { // 노드를 생성하는 부분.
 function allExpanded() {
 	var nodes = myDiagram.nodes;
 	while (nodes.hasNext()) {
-		if (nodes.value.data.everExpanded) {
+		if (nodes.value.data.collapse == 1) {
 			nodes.value.isTreeExpanded = !nodes.value.isTreeExpanded;
 		}
 		console.log(nodes.value.data.everExpanded);
@@ -289,5 +296,3 @@ function createInput() {
 	}, false);
 	return customText;
 }
-
-
