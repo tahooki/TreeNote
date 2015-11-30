@@ -3,7 +3,7 @@ function goImpl() {
 	// if (window.goSamples) goSamples();
 	//json data를 서버에서 호출후 map 생성
 	
-	var jsondata = jQuery.getJSON('http://192.168.0.63:8080/tree/getTree/1000000',function(success){
+	var jsondata = jQuery.getJSON('http://192.168.0.56:8080/tree/getTree/1000000',function(success){
 		console.log(success);
 		var gojs = go.GraphObject.make; // for conciseness in defining templates
 		
