@@ -6,24 +6,25 @@
 <mapper namespace="keywordMapper">
 
 	<resultMap id="keywordSelectMap" type="keyword">
-		<result property="keywordNo" column="KEYWORD_NO" jdbcType="INTEGER"/>
+		<result property="key" column="KEYWORD_NO" jdbcType="INTEGER"/>
 		<result property="treeNo" column="TREE_NO" jdbcType="INTEGER"/>
 		<result property="ownerUserNo" column="OWNER_USER_NO" jdbcType="INTEGER"/>
 		<result property="keyword" column="KEYWORD" jdbcType="VARCHAR"/>
 		<result property="collapse" column="COLLAPSE" jdbcType="INTEGER"/>
-		<result property="parentNo" column="PARENT_KEYWORD_NO" jdbcType="INTEGER"/>
+		<result property="parent" column="PARENT_KEYWORD_NO" jdbcType="INTEGER"/>
+		<result property="color" column="COLOR" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="select-keywords">
 		SELECT
-		KEYWORD_NO, TREE_NO, OWNER_USER_NO, KEYWORD, COLLAPSE, PARENT_KEYWORD_NO
+		KEYWORD_NO, TREE_NO, OWNER_USER_NO, KEYWORD, COLLAPSE, PARENT_KEYWORD_NO, COLOR
 		FROM KEYWORDS
 	</sql>
 	
 	<insert id="addKeyword" parameterType="keyword">
 		INSERT
 		INTO	KEYWORDS
-		VALUES( #{keywordNo}, #{treeNo}, #{ownerUserNo}, #{keyword}, #{collapse}, #{parentNo} )
+		VALUES( #{key}, #{treeNo}, #{ownerUserNo}, #{keyword}, #{collapse}, #{parent} , #{color})
 	</insert>
 
 	<update id="updateKeyword" parameterType="keyword">
@@ -33,9 +34,10 @@
 			KEYWORD = #{keyword}, 
 			COLLAPSE = #{collapse},
 			OWNER_USER_NO = #{ownerUserNo},
-			PARENT_KEYWORD_NO = #{parentNo} 
+			PARENT_KEYWORD_NO = #{parent}, 
+			COLOR = #{color}
 		</set>
-		WHERE KEYWORD_NO = #{keywordNo} 
+		WHERE KEYWORD_NO = #{key} 
 	</update>
 	
 	<select id="listChildKeyword" parameterType="java.lang.Integer" resultMap="keywordSelectMap">
