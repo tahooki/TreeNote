@@ -29,8 +29,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void addUser(User user) throws Exception {
-		// TODO Auto-generated method stub
-
+		System.out.println("service adduser");
+		userDao.addUser(user);
+		
 	}
 
 	@Override
@@ -55,5 +56,12 @@ public class UserServiceImpl implements UserService {
 	public boolean checkDuplication(String email) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public User loginUser(User user) throws Exception{
+		User returnUser = userDao.getLoginUser(user.getEmail());
+		
+		
+		return returnUser;
 	}
 }

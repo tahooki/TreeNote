@@ -15,4 +15,6 @@ public interface UserService {
 	public int updateUser(User user) throws Exception ;
 	
 	public boolean checkDuplication(String email) throws Exception;
+	
+	public User loginUser(User user) throws Exception;
 }

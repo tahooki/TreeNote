@@ -10,9 +10,12 @@ public interface UserDao {
 
 	public User getUser(int userNo) throws Exception ;
 
-	public List<User> getUserList(int userNo) throws Exception ;
 
 	public int updateUser(User user) throws Exception ;
 	
 	public boolean checkDuplication(String email) throws Exception;
+
+	public List<User> getFriendList(int userNo) throws Exception;
+	
+	public User getLoginUser(String email) throws Exception;
 }
