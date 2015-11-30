@@ -1,17 +1,40 @@
-function jqueryImpl() {
+$(function(){
 	$("#login").click(function() {
-		$("#navbar").show("slide", {
-			direction : "up"
-		}, 1000);
-		$("#loginContainer").css("display","none");
-		$('#treeContainer').css('display','block');
-		$("#timeline").delay(1000).show("slide", {
-			direction : "right"
-		}, 500);
-		$("#base").delay(1000).show("fade", 500);
-		setTimeout("goImpl()", 2000);
-	});
+		$.getJSON('/user/login',
+				data : 
+				
+				
+				
+				function(data){
+		alert(data)
+			if(false){
+				
+					$("#navbar").show("slide", {
+						direction : "up"
+					}, 1000);
+					$("#loginContainer").css("display","none");
+					$('#treeContainer').css('display','block');
+					$("#timeline").delay(1000).show("slide", {
+						direction : "right"
+					}, 500);
+					$("#base").delay(1000).show("fade", 500);
+					setTimeout("goImpl()", 2000);
+					
+			}else{
+					$('#exampleInputEmail1').val('');
+					$('#exampleInputPassword1').val('');
+					
+				
+			}
+		})
 
+	})
+
+})
+
+
+$(function(){
+	
 	$("#circle").click(function() {
 		if ($("#circle input").val() == "") {
 			$("#circle input").focus();
@@ -31,18 +54,18 @@ function jqueryImpl() {
 		$(this).hide();
 		$("#circleInput").show().focus().text($(this).val());
 	});
-
+	
 	/*
 	 * $( document ).click(function() { closeKeyword(); });
 	 */
-
+	
 	$("#timeline").click(function() {
 		$(this).toggleClass("timeline-out", 500, "easeOutSine");
 		$("#timelinec").toggle("drop");
 	});
 	autocom();
-}
-
+	
+})
 function json(data){
 	
 }
