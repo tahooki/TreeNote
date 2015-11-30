@@ -168,7 +168,7 @@ function goImpl() {
 // for a node until we look for them the first time, which happens
 // upon the first tree-expand of a node.
 function createSubTree(parentdata) { // 노드를 생성하는 부분.
-	var numchildren = Math.floor(Math.random() * 10); // 노드 갯수 랜덤으로 뽑음.
+	var numchildren = Math.floor(1); // 노드 갯수 랜덤으로 뽑음.
 	if (myDiagram.nodes.count <= 1) {
 		numchildren += 1; // make sure the root node has at least one child
 	}
