@@ -1,13 +1,8 @@
 $(function(){
 	$("#login").click(function() {
 		$.getJSON('/user/login',
-				data : 
-				
-				
-				
 				function(data){
-		alert(data)
-			if(false){
+			if(true){
 				
 					$("#navbar").show("slide", {
 						direction : "up"
@@ -87,9 +82,9 @@ function facebookLogin(){
 
 function setKeyword(data) {
 	//circleLabel = JSON.parse(data);
-	$("#keyword1 #name").text(data.name);
-	$("#keyword2 #name").text(data.name);
-	$("#keyword3 #name").text(data.name);
+	$("#keyword1 #name").text(data.keyword);
+	$("#keyword2 #name").text(data.keyword);
+	$("#keyword3 #name").text(data.keyword);
 	$("#keyword1").show();
 	$("#keyword2").show();
 	$("#keyword3").show();
