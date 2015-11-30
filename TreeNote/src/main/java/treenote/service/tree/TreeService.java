@@ -17,7 +17,7 @@ public interface TreeService {
 	
 	//불러오기
 	public String getTree(int treeNo) throws Exception;
-	
+
 	//트리 리스트 불러오기
 	public List<Tree> listTree(int userNo) throws Exception;
 }

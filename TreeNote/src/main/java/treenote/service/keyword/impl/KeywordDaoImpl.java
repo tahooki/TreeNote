@@ -42,7 +42,7 @@ public class KeywordDaoImpl implements KeywordDao {
 	@Override
 	public void removeKeyword(Keyword keyword) throws Exception {
 		// TODO Auto-generated method stub
-		sqlSession.delete("keywordMapper.removeKeyword", keyword.getKeywordNo());
+		sqlSession.delete("keywordMapper.removeKeyword", keyword.getKey());
 	}
 
 	@Override

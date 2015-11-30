@@ -55,11 +55,10 @@ public class TreeController {
 	
 	
 	//불러오기
-	@RequestMapping(value = "listFriend/{treeNo}")
+	@RequestMapping(value = "getTree/{treeNo}")
 	public void getTree(@PathVariable int treeNo, Model model) throws Exception{
 		System.out.println("/getTree");
-				
-		
+		model.addAttribute("Tree", treeService.getTree(treeNo));
 	}
 	
 	

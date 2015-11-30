@@ -2,16 +2,13 @@ package treenote.service.tree.impl;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import treenote.domain.Content;
 import treenote.domain.Keyword;
 import treenote.domain.Tree;
 import treenote.service.content.ContentDao;
@@ -79,10 +76,10 @@ public class TreeServiceImpl implements TreeService {
 	public void removeTree(int treeNo) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Service.removeTree::");
-		Tree delTree=treeDao.getTree(treeNo);
+		//Tree delTree=treeDao.getTree(treeNo);
 
-		Keyword delKeyword=keywordDao.getKeyword(delTree.getTreeNo());
-		Content delContent=contentDao.getContent(delKeyword.getKeywordNo());
+		//Keyword delKeyword=keywordDao.getKeyword(delTree.getTreeNo());
+		//Content delContent=contentDao.getContent(delKeyword.getKey());
 		
 		treeDao.removeTree(treeNo);
 	}

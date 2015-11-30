@@ -1,19 +1,36 @@
 package treenote.domain;
 
+/**
+ * @author Window77
+ *
+ */
+/**
+ * @author Window77
+ *
+ */
 public class Keyword {
-	private int keywordNo;
+	private int key;
 	private int treeNo;
 	private int ownerUserNo;
 	private String keyword;
-	private boolean collapse;
-	private int parentNo;
+	private int collapse;
+	private int parent;
+	private String color;
 
-	public int getKeywordNo() {
-		return keywordNo;
+	public int getKey() {
+		return key;
 	}
 
-	public void setKeywordNo(int keywordNo) {
-		this.keywordNo = keywordNo;
+	public void setKey(int key) {
+		this.key = key;
+	}
+
+	public int getParent() {
+		return parent;
+	}
+
+	public void setParent(int parent) {
+		this.parent = parent;
 	}
 
 	public int getTreeNo() {
@@ -40,25 +57,28 @@ public class Keyword {
 		this.keyword = keyword;
 	}
 
-	public boolean isCollapse() {
+	public int getCollapse() {
 		return collapse;
 	}
 
-	public void setCollapse(boolean collapse) {
+	public void setCollapse(int collapse) {
 		this.collapse = collapse;
 	}
 
-	public int getParentNo() {
-		return parentNo;
+	public String getColor() {
+		return color;
 	}
 
-	public void setParentNo(int parentNo) {
-		this.parentNo = parentNo;
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	@Override
 	public String toString() {
-		return "Keyword [keywordNo=" + keywordNo + ", treeNo=" + treeNo + ", ownerUserNo=" + ownerUserNo + ", keyword="
-				+ keyword + ", collapse=" + collapse + ", parentNo=" + parentNo + "]";
+		return "Keyword [key=" + key + ", treeNo=" + treeNo + ", ownerUserNo=" + ownerUserNo + ", keyword=" + keyword
+				+ ", collapse=" + collapse + ", parent=" + parent + ", color=" + color + "]";
 	}
+
+	
+
 }

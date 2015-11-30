@@ -56,15 +56,6 @@ public class TreeDaoImpl implements TreeDao {
 	}
 
 	@Override
-	public Tree getTree(int treeNo) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("Dao.getTree::");
-		
-		return null;
-
-	}
-
-	@Override
 	public List<Tree> listTree(int userNo) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Dao.listTree::");

@@ -41,7 +41,7 @@ public class KeywordServiceImpl implements KeywordService {
 		// TODO Auto-generated method stub
 		int keywordNo = keywordDao.getKeywrodNo();
 		//int keywordNo = keyword.getKeywordNo();
-		keyword.setKeywordNo(keywordNo);
+		keyword.setKey(keywordNo);
 		keywordDao.addKeyword(keyword);
 		return keywordDao.getKeyword(keywordNo);
 	}
