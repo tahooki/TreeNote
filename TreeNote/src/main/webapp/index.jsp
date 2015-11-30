@@ -29,12 +29,12 @@
 
 <!-- 개발 부분 -->
 
-<script>
+<!-- <script>
   $(function() {
 	  jqueryImpl();
   });
   
-  </script>
+  </script> -->
 </head>
 <body style="height:100%;">
 	<nav class="navbar navbar-fixed-top" id="navbar"
