@@ -27,26 +27,27 @@ public class ContentServiceImpl implements ContentService {
 
 	@Override
 	public void addContent(Content content) throws Exception {
-		// TODO Auto-generated method stub
-
+		contentDao.addContent(content);
 	}
 
 	@Override
 	public void removeContent(int contentNo) throws Exception {
-		// TODO Auto-generated method stub
-
+		contentDao.removeContent(contentNo);
 	}
 
 	@Override
 	public int updateContent(Content content) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return contentDao.updateContent(content);
+	}	
+	
+	@Override
+	public int updateScrapContent(int content) throws Exception {
+		return contentDao.updateScrapContent(content);
 	}
 
 	@Override
 	public Content getContent(int contentNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return contentDao.getContent(contentNo);
 	}
 
 }

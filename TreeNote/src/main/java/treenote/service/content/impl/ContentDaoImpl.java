@@ -25,33 +25,37 @@ public class ContentDaoImpl implements ContentDao {
 		System.out.println(this.getClass());
 	}
 
+	
 	@Override
 	public void addContent(Content content) throws Exception {
-		// TODO Auto-generated method stub
-
+		sqlSession.insert("ContentMapper.addContent", content);
 	}
 
 	@Override
 	public void removeContent(int contentNo) throws Exception {
-		// TODO Auto-generated method stub
-
+		sqlSession.delete("ContentMapper.deleteContent", contentNo);
 	}
 
 	@Override
 	public int updateContent(Content content) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.update("ContentMapper.updateContent", content);
+	}
+
+	@Override
+	public int updateScrapContent(int content) throws Exception {
+		return sqlSession.update("contentMapper.updateScrapContent", content);
 	}
 
 	@Override
 	public Content getContent(int contentNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectOne("ContentMapper.getContent", contentNo);
 	}
 
 	@Override
-	public Content copyContent(int contentNo) throws Exception {
-		// TODO Auto-generated method stub
+	public Content copyContent(Content content) throws Exception {
+		addContent(content);
+		updateScrapContent(content.getScrap()+1);		
+		
 		return null;
 	}
 

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import treenote.domain.Content;
@@ -24,23 +26,39 @@ public class ContentController {
 
 	//생성
 	@RequestMapping(value = "addContent")
-	public void addContent(Content content, Model model) throws Exception{
+	public void addContent(@RequestBody Content content, Model model) throws Exception{
 		System.out.println("/addContent");
+		
+		contentService.addContent(content);
+		model.addAttribute("content", content);
 	}
+	
 	//삭제
 	@RequestMapping(value = "removeContent/{contentNo}")
-	public void removeContent(int contentNo, Model model) throws Exception{
+	public void removeContent(@PathVariable int contentNo, Model model) throws Exception{
 		System.out.println("/removeContent");
+		
+		contentService.removeContent(contentNo);
+		//model.addAttribute("content", content);
+		
 	}
+	
 	//내용수정
 	@RequestMapping(value = "updateContent")
-	public void updateContent(Content content, Model model) throws Exception{
+	public void updateContent(@RequestBody Content content, Model model) throws Exception{
 		System.out.println("/updateContent");
+		
+		contentService.updateContent(content);
+		model.addAttribute("content", content);
 	}
+	
 	//불러오기
 	@RequestMapping(value = "getContent/{contentNo}")
-	public void getContent(int contentNo, Model model) throws Exception{
+	public void getContent(@PathVariable int contentNo, Model model) throws Exception{
 		System.out.println("/getContent");
+		
+		Content content = contentService.getContent(contentNo);
+		model.addAttribute("conent", content);
 	}
 	
 }
