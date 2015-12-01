@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import treenote.domain.Reply;
@@ -25,8 +26,12 @@ public class ReplyController {
 
 	//추가
 	@RequestMapping(value = "addReply")
-	public void addReply(Reply reply, Model model) throws Exception{
+	public void addReply(@RequestBody Reply reply, Model model) throws Exception{
 		System.out.println("/addReply");
+		System.out.println("Reply :: "+reply);
+		
+		replyService.addReply(reply);
+		model.addAttribute("reply", reply);
 	}
 	//수정
 	@RequestMapping(value = "updateReply")

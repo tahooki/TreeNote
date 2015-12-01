@@ -19,6 +19,7 @@
 		<typeAlias alias="reply" type="treenote.domain.Reply" />
 		<typeAlias alias="tree" type="treenote.domain.Tree" />
 		<typeAlias alias="content" type="treenote.domain.Content" />
+		<typeAlias alias="page" type="treenote.domain.Page" />
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->

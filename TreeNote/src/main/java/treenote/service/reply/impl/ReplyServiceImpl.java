@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import treenote.domain.Reply;
+import treenote.domain.Page;
 import treenote.service.reply.ReplyDao;
 import treenote.service.reply.ReplyService;;
 
@@ -40,22 +41,40 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public void removeReply(int replyNo) throws Exception {
+	public void removeReply(Reply reply) throws Exception {
 		// TODO Auto-generated method stub
-		replyDao.removeReply(replyNo);
+		replyDao.removeReply(reply);
 	}
 
 	@Override
-	public List<Reply> listReply(int contentNo) throws Exception {
+	public List<Reply> listReply(Page page) throws Exception {
 		// TODO Auto-generated method stub
-		return replyDao.listReply(contentNo);
+		return replyDao.listReply(page);
 	}
 
 	@Override
-	public int ReplytotalCount(int contentNo) throws Exception {
+	public int replytotalCount(int contentNo) throws Exception {
 		// TODO Auto-generated method stub
 		return replyDao.ReplytotalCount(contentNo);
 	}
 
+	@Override
+	public List<Reply> listReplyOfReply(Page page) throws Exception {
+		// TODO Auto-generated method stub
+		if(page.getCurrentPage() == 0){
+			page.setCurrentPage(1);
+		}
+		return replyDao.listReplyOfReply(page);
+	}
+
+	@Override
+	public int replyOfReplytotalCount(int parentReplyNo) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(";;");
+		System.out.println(parentReplyNo);
+		return replyDao.ReplyOfReplytotalCount(parentReplyNo);
+	}
+	
+	
 	
 }
