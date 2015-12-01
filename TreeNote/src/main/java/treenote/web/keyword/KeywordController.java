@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import treenote.domain.Keyword;
@@ -26,21 +27,21 @@ public class KeywordController {
 
 	// 추가
 	@RequestMapping(value = "addKeyword")
-	public void addKeyword(Keyword keyword, Model model) throws Exception {
-		System.out.println("/addKeyword");
+	public void addKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
+		System.out.println("/addKeyword"+keyword);
 		model.addAttribute("keyword", keywordService.addKeyword(keyword));
 	}
 
 	// 수정
 	@RequestMapping(value = "updateKeyword")
-	public void updateKeyword(Keyword keyword, Model model) throws Exception {
+	public void updateKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
 		System.out.println("/updateKeyword");
 		keywordService.updateKeyword(keyword);
 	}
 
 	// 삭제
 	@RequestMapping(value = "removeKeyword")
-	public void removeKeyword(Keyword Keyword, Model model) throws Exception {
+	public void removeKeyword(@RequestBody Keyword Keyword, Model model) throws Exception {
 		System.out.println("/removeKeyword");
 		keywordService.removeKeyword(Keyword);
 	}
@@ -63,7 +64,7 @@ public class KeywordController {
 
 	// 키워드 복사
 	@RequestMapping(value = "copyKeyword")
-	public void copyKeyword(Keyword keyword, Model model) throws Exception {
+	public void copyKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
 		System.out.println("/copyKeyword");
 		keywordService.copyKeyword(keyword);
 	}

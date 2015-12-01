@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" %>
 <!doctype html>
-<html lang="en" style="height:100%; min-height: 400px; min-width: 300px;">
+<html lang="en" style="height:100%; min-height: 780px; min-width: 992px;">
 <head>
 <meta charset="utf-8">
 <title>Tree</title>
@@ -124,8 +124,40 @@
 							style="text-align: left; font-size: 20px; padding: 10px"></div>
 					</div>
 				</div>
-			</div>		
+			</div>
+				
+			<div id="content" style="display: none;">
+				
+			</div>
+			
+			<div id="reply" style="display: none;">
+			
+			</div>
+			
+			<div id="mypage" style="display: none;">
+			
+			</div>
+			
+			<div id="userpage" style="display: none;">
+			
+			</div>
+			
+			<div id="treelist" style="display: none;">
+			
+			</div>
+			
+			<div id="friendlist" style="display: none;"></div>
 		</div>
+		
+		<div id="temp">
+			<div id="btn_content">내용</div>
+			<div id="btn_mypage">개인page</div>
+			<div id="btn_userpage">회원page</div>
+			<div id="btn_tree">트리리스트</div>
+			<div id="btn_reply">댓글리스트</div>
+			<div id="btn_friend">친구리스트</div>
+		</div>
+		
 		<!-- style="width: 200px; height: 100%; border: 2px solid #00FF00; background: #efefef; float: right; display: none; -->
 		
 	</div>
@@ -135,6 +167,7 @@
 </div>
 	<!-- /container -->
 <input id="inputText" type="text" class="form-control"  style="display:none; width:auto;">
+
 
 
 <script type="text/javascript">

@@ -30,7 +30,7 @@ $(function(){
 
 $(function(){
 	
-	$("#circle").click(function() {
+	/*$("#circle").click(function() {
 		if ($("#circle input").val() == "") {
 			$("#circle input").focus();
 		} else {
@@ -48,7 +48,7 @@ $(function(){
 	$("#circleLabel").click(function() {
 		$(this).hide();
 		$("#circleInput").show().focus().text($(this).val());
-	});
+	});*/
 	
 	/*
 	 * $( document ).click(function() { closeKeyword(); });
@@ -57,6 +57,24 @@ $(function(){
 	$("#timeline").click(function() {
 		$(this).toggleClass("timeline-out", 500, "easeOutSine");
 		$("#timelinec").toggle("drop");
+	});
+	$("#btn_content").click(function() {
+		$("#content").toggle("drop");
+	});
+	$("#btn_mypage").click(function() {
+		$("#mypage").toggle("drop");
+	});
+	$("#btn_userpage").click(function() {
+		$("#userpage").toggle("drop");
+	});
+	$("#btn_tree").click(function() {
+		$("#treelist").toggle("drop");
+	});
+	$("#btn_reply").click(function() {
+		$("#reply").toggle("drop");
+	});
+	$("#btn_friend").click(function() {
+		$("#friendlist").toggle("drop");
 	});
 	autocom();
 	
