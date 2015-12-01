@@ -76,11 +76,6 @@ public class TreeServiceImpl implements TreeService {
 	public void removeTree(int treeNo) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Service.removeTree::");
-		//Tree delTree=treeDao.getTree(treeNo);
-
-		//Keyword delKeyword=keywordDao.getKeyword(delTree.getTreeNo());
-		//Content delContent=contentDao.getContent(delKeyword.getKey());
-		
 		treeDao.removeTree(treeNo);
 	}
 

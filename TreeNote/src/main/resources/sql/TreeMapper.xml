@@ -9,6 +9,8 @@
   		<result property="treeNo" column="tree_no" jdbcType="NUMERIC"/>
   		<result property="userNo" column="user_no" jdbcType="NUMERIC"/>
   		<result property="title" column="Title" jdbcType="VARCHAR"/>
+  		  		
+  			
   		
   	</resultMap>	
 	
@@ -45,10 +47,10 @@
 		<where> user_no=#{value} </where>
 	</select>
 	
-	<delete id="removeTree" parameterType="tree">
+	<delete id="removeTree" parameterType="int">
 		DELETE
 		FROM trees
-		WHERE tree_no=#{treeNo}
+		WHERE tree_no=#{value}
 	</delete>
 	
 	

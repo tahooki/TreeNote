@@ -51,11 +51,12 @@ public class TreeController {
 		System.out.println("/removeTree");
 		
 		treeService.removeTree(treeNo);
+		System.out.println("삭제 성공");
 	}
 	
 	
 	//불러오기
-	@RequestMapping(value = "getTree/{treeNo}")
+	@RequestMapping(value = "getTree/{treeNo}", method=RequestMethod.GET )
 	public void getTree(@PathVariable int treeNo, Model model) throws Exception{
 		System.out.println("/getTree");
 		model.addAttribute("Tree", treeService.getTree(treeNo));

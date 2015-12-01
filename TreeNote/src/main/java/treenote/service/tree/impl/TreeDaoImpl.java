@@ -51,7 +51,6 @@ public class TreeDaoImpl implements TreeDao {
 		System.out.println("Dao.removeTree::");
 		
 		sqlSession.delete("TreeMapper.removeTree", treeNo);
-		
 
 	}
 
