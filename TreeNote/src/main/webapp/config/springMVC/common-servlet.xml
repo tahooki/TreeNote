@@ -42,6 +42,7 @@
 	<!-- ■ DefaultAnnotationHandlerMapping 설정 등 기타 Annotation 기반 모든 기능을 사용 할 
 		수 있는 아래의 설정으로 변경 -->
 	<mvc:annotation-driven />
+	<mvc:default-servlet-handler/>
 
 
 	<!-- ■ Annotation 기반의 모든 기능을 사용 할 수 있는 설정 <mvc:annotation-driven /> 사용으로 
@@ -75,20 +76,20 @@
 
 	<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 	<!-- /////// Client 에서 전달되는 JSON Data 를 Domain Object 롤 변환 받기위한 설정 /////// -->
-	<bean id="jsonConverter"
+	<!-- <bean id="jsonConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		<property name="supportedMediaTypes" value="application/json" />
 	</bean>
-
+ -->
 	<!-- /////// AnnotationMethodHandlerAdapter 에 jsonConverer DI /////// -->
-	<bean
+<!-- 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<ref bean="jsonConverter" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 
@@ -96,7 +97,7 @@
 	<!-- /////// Client 로 전달되는 Domain Object 를 JSON Data 변환위한 설정 /////// -->
 	<!-- Client Response 받기원핟는 Content 타입을 선택,협상(Negotiation)하는 ViewResolver 
 		설정 -->
-	<bean
+	<!-- <bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 
 		<property name="defaultContentType" value="text/html" />
@@ -107,7 +108,61 @@
 					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+	
+	
+	
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    <!-- 4.2.x 버전에서는  mediaTypes 프로퍼티가 readonly임. 
+        => 외부의 ContentNegotiationManager로 대체함.
+    -->
+    <!--  
+    <property name="mediaTypes">
+        <map>
+            <entry key="atom" value="application/atom+xml"/>
+            <entry key="html" value="text/html"/>
+            <entry key="json" value="application/json"/>
+        </map>
+    </property>
+    -->
+    <property name="contentNegotiationManager" 
+              ref="contentNegotiationManager"/>
+    <property name="viewResolvers">
+        <list>
+            <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+            <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                <property name="prefix" value="/WEB-INF/jsp"/>
+                <property name="suffix" value=".jsp"/>
+            </bean>
+        </list>
+    </property>
+    <property name="defaultViews">
+        <list>
+            <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+        </list>
+    </property>
+  </bean>
+  	
+	<mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
+	
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:default-servlet-handler/>
+	
+
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    <property name="favorPathExtension" value="false" />
+    <property name="favorParameter" value="true" />
+    <property name="mediaTypes">
+		<map>
+			<entry key="html" value="text/html" />
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+		</map>
+	</property>
+  </bean>
+	
 
 </beans>
