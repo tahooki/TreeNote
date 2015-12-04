@@ -3,6 +3,7 @@ package treenote.domain;
 public class Tree {
 	private int treeNo;
 	private int userNo;
+	private int rootkey;
 	private String title;
 
 	public int getTreeNo() {
@@ -21,6 +22,13 @@ public class Tree {
 		this.userNo = userNo;
 	}
 	
+	public int getRootkey() {
+		return rootkey;
+	}
+
+	public void setRootkey(int rootkey) {
+		this.rootkey = rootkey;
+	}
 
 	public String getTitle() {
 		return title;
@@ -32,6 +40,8 @@ public class Tree {
 
 	@Override
 	public String toString() {
-		return "Tree [treeNo=" + treeNo + ", userNo=" + userNo + ", Title=" + title + "]";
+		return "Tree [treeNo=" + treeNo + ", userNo=" + userNo + ", rootkey=" + rootkey + ", title=" + title + "]";
 	}
+	
+	
 }

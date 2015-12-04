@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,12 +25,25 @@ public class KeywordController {
 	public KeywordController() {
 		System.out.println(this.getClass());
 	}
-
-	// 추가
+	//새로만들기
+	@RequestMapping(value = "newKeyword")
+	public void newKeyword(@RequestBody Keyword keyword, Model model) throws Exception{
+		System.out.println("/newKeyword");
+		model.addAttribute("keyword", keywordService.newKeyword(keyword));
+	}
+	
+	//추가
 	@RequestMapping(value = "addKeyword")
 	public void addKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
-		System.out.println("/addKeyword"+keyword);
+		System.out.println("/addKeyword");
 		model.addAttribute("keyword", keywordService.addKeyword(keyword));
+	}
+	
+	//키워드 교체
+	@RequestMapping(value = "changeKeyword")
+	public void changeKeyword(@RequestBody Keyword keyword, Model model) throws Exception{
+		System.out.println("/changeKeyword");
+		model.addAttribute("keyword", keywordService.changeKeyword(keyword));
 	}
 
 	// 수정
@@ -47,26 +61,25 @@ public class KeywordController {
 	}
 
 	// 해당 키워드 리스트 불러오기
-	@RequestMapping(value = "listTimeLineKeyword/{keyword}")
-	public void listTimeLineKeyword(String keyword, Model model) throws Exception {
-		System.out.println("/listKeyword");
-		keywordService.listTimeLineKeyword(keyword);
+	@RequestMapping(value = "listSearchKeyword")
+	public void listSearchKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
+		System.out.println("/listSearchKeyword"+keyword);
+		model.addAttribute("list", keywordService.listSearchKeyword(keyword.getKeyword()));
 	}
 
 	// 자식 키워드 불러오기
-	@RequestMapping(value = "listChildKeyword/{keywordNo}")
-	public void listChildKeyword(int keywordNo, Model model) throws Exception {
-		System.out.println("/listChildKeyword");
-		List<Keyword> list = keywordService.listChildKeyword(keywordNo);
-		//class:??? array:???
-		model.addAttribute("listChildKeyword", list);
+	@RequestMapping(value = "listOnwerChildKeyword")
+	public void listOnwerChildKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
+		System.out.println("/listOnwerChildKeyword");
+		List<Keyword> list = keywordService.listOnwerChildKeyword(keyword);
+		model.addAttribute("list", list);
 	}
-
-	// 키워드 복사
-	@RequestMapping(value = "copyKeyword")
-	public void copyKeyword(@RequestBody Keyword keyword, Model model) throws Exception {
-		System.out.println("/copyKeyword");
-		keywordService.copyKeyword(keyword);
+	
+	//자동완성
+	@RequestMapping(value = "autoComplete")
+	public void autoComplete(Model model) throws Exception{
+		System.out.println("/autoComplete");
+		model.addAttribute("autoComplete", keywordService.autoComplete());
 	}
 
 }

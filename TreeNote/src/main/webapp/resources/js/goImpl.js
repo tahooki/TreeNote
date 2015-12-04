@@ -28,7 +28,13 @@ function goImpl() {
 				"draggingTool.dragsTree" : true, // dragging for both move and copy
 				"undoManager.isEnabled" : true, // ctrl+z, ctrl+y 되게마는 것.
 				hasHorizontalScrollbar : false,
-				hasVerticalScrollbar : false
+				hasVerticalScrollbar : false,
+				
+				mouseOver:function(e){
+					//잠시 폐쇠
+					//console.log("canvase mouseOver :: "+e);
+					//myDiagram.model.removeNodeData(myDiagram.model.findNodeDataForKey(0));
+				}
 			});
 		
 		// Define the Node template.
@@ -40,14 +46,22 @@ function goImpl() {
 				// 않는다.
 				isTreeLeaf : false,
 				// 자식노드를 생성하지 못하게 만든다.?
-				click:function(e, obj){
-					setKeyword(obj.part.data);
+				click:function(e, obj) {
+					console.log("node Data : "+JSON.stringify(obj.data));
 				},
 				selectionChanged:function(part){
 					selectKeyword = part;
-					part.findObject("button1").visible = !part.findObject("button1").visible;
-					part.findObject("button2").visible = !part.findObject("button2").visible;
-				}	
+					
+					part.findObject("button1").visible = part.isSelected;
+					part.findObject("button2").visible = part.isSelected;
+					part.findObject("button3").visible = part.isSelected;
+					if(!part.isSelected){
+						//timeline으로 돌리기 !
+					}
+				},
+				mouseEnter:function(e,obj){
+					console.log("mouseEnter");
+				}
 			},
 			new go.Binding("isShadowed", "isSelected").ofObject(),
 	        {
@@ -76,8 +90,461 @@ function goImpl() {
 				new go.Binding("text", "keyword"))// 노드에 표시되는 텍스트를 data에서 선택하는부분.. data의
 					// property중 name이라는 것을 선택.
 			),
-			// the expand/collapse button, at the top-right corner
-			/*gojs("TreeExpanderButton", {
+			gojs(go.Picture, {
+				name: "button1",
+				alignment : go.Spot.TopRight,
+				maxSize : new go.Size(20, 20),
+				source : "resources/img/btn_add.png",
+				visible : false,
+				click : function(e, obj) {
+					// openDialog();
+					var node = obj.part; // 버튼 오브젝트가 있는 노드를 받는다.
+					if (node === null)
+						return; // 노드가 없으면 끝낸다.
+					e.handled = true; // ??
+					var diagram = node.diagram; // 노드의 다이어 그램을 받는다.
+					diagram.startTransaction("	"); // 트랜젝션 시작... 중간에 오류가 나거나하면 롤백됨.
+					// this behavior is specific to this incrementalTree sample:
+					var data = node.data;
+					
+					newKeyword(data); // 트리생성
+
+					if(!obj.part.isTreeExpanded){
+						obj.part.findObject("button2").source = "resources/img/btn_collapse.png";
+						obj.part.isTreeExpanded = true;
+						obj.part.data.collapse = 1;
+						updateKeyword(obj.part.data);
+					}
+					
+					diagram.commitTransaction("CollapseExpandTree"); // startTransaction
+				}
+			}),
+			gojs(go.Picture, {
+				name: "button2",
+				alignment : go.Spot.BottomRight,
+				maxSize : new go.Size(20, 20),
+				source : "resources/img/btn_expanded.png",
+				visible : false,
+				click : function(e, obj) {
+					// openDialog();
+					if(obj.part.isTreeExpanded){
+						obj.source = "resources/img/btn_expanded.png";
+						obj.part.isTreeExpanded = false;
+						obj.part.data.collapse = 0;
+						updateKeyword(obj.part.data);
+					}else{
+						var child = obj.part.findTreeChildrenNodes();
+						//console.log("child count??"+ child);
+						if(child.count == 0){
+							listOnwerChildKeyword(obj.part);
+							obj.part.data.copyNo = obj.part.data.key;
+						}
+						obj.source = "resources/img/btn_collapse.png";
+						obj.part.isTreeExpanded = true;
+						obj.part.data.collapse = 1;
+						updateKeyword(obj.part.data);
+					}
+				}
+			}),
+			gojs(go.Picture, {
+				name: "button3",
+				alignment : go.Spot.BottomLeft,
+				maxSize : new go.Size(20, 20),
+				source : "resources/img/btn_delete.png",
+				visible : false,
+				click : function(e, obj) {
+					// openDialog();
+					removeKeyword(obj.part);
+				}
+			})
+			
+		); // end Node
+
+		// create the model with a root node data
+		myDiagram.model = new go.TreeModel([ // 트리모델로 설정
+	     {
+	    	 key : 0,
+	    	 keyword : "키워드",
+	    	 color : "lightgreen",
+	    	 collapse : 0
+	     } // 초기 토드 추가
+	     ]);
+
+		myDiagram.layoutDiagram(true);
+
+		myDiagram.model = go.Model.fromJson(success.Tree)
+
+		myDiagram.model.addChangedListener(function(e) { // changeListener...
+			
+			if (e.isTransactionFinished) {
+				var tx = e.object;
+				if (tx instanceof go.Transaction && console) {
+					tx.changes.each(function(ea){
+						if (e.modelChange !== "nodeDataArray") return;
+					      // record node insertions and removals
+					      if (e.change === go.ChangedEvent.Insert) {
+					        console.log(evt.propertyName + " added node with key: " + e.newValue.key);
+					      } else if (e.change === go.ChangedEvent.Remove) {
+					        console.log(evt.propertyName + " removed node with key: " + e.oldValue.key);
+					      }
+					});
+					console.log(tx.toString());
+					tx.changes.each(function(c) {
+						// consider which ChangedEvents to record
+						if (c.model)
+							console.log("  " + c.toString());
+					});
+				}
+			}
+		});
+		
+		myDiagram.addDiagramListener("TextEdited", function(e) {
+		});
+		// console.log(myDiagram.model);
+		allExpanded();
+		myDiagram.toolManager.textEditingTool.defaultTextEditor = createInput();
+	})
+}
+
+function newKeyword(parentdata) { // 노드를 생성하는 부분.
+	jQuery.ajax( 
+	{
+		url : "/keyword/newKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : 0,
+			treeNo : 1000000,
+			keyword : "키워드",
+			copyNo : 0,
+			parent : parentdata.key,
+			collapse : 0,
+			color : go.Brush.randomColor()
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+			console.log(JSONData.keyword);
+			var model = myDiagram.model;
+			var parent = myDiagram.findNodeForData(parentdata);
+			// add to model.nodeDataArray and create a Node
+			model.addNodeData(JSONData.keyword);
+			// position the new child node close to the parent
+			var child = myDiagram.findNodeForData(JSONData.keyword);
+			child.location = parent.location;
+			
+			parentdata.collapse = 1;
+			updateKeyword(parentdata);
+		}
+	})
+}
+
+function addKeyword(data) { // 노드를 생성하는 부분.
+	var keyword = JSON.parse(data);
+	var selectedKeyword;
+	var nodes = myDiagram.nodes;
+	while(nodes.hasNext()){
+		if(nodes.value.isSelected){
+			selectedKeyword=nodes.value;
+			console.log(selectedKeyword);
+			console.log(selectedKeyword.data);
+		}
+	}
+	jQuery.ajax( 
+	{
+		url : "/keyword/addKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : 0,
+			treeNo : selectedKeyword.data.treeNo,
+			keyword : keyword.keyword,
+			copyNo : keyword.copyNo,
+			parent : selectedKeyword.data.key,
+			collapse : 0,
+			color : keyword.color
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+			console.log(JSONData.keyword);
+			var model = myDiagram.model;
+			var parent = myDiagram.findNodeForData(selectedKeyword.data);
+			// add to model.nodeDataArray and create a Node
+			model.addNodeData(JSONData.keyword);
+			// position the new child node close to the parent
+			var child = myDiagram.findNodeForData(JSONData.keyword);
+			child.location = parent.location;
+
+			selectedKeyword.findObject("button2").source = "resources/img/btn_collapse.png";
+			 
+			selectedKeyword.isTreeExpanded = true;
+			selectedKeyword.data.collapse = 1;
+			updateKeyword(selectedKeyword.data);
+		}
+	})
+}
+
+function changeKeyword(data) { // 노드를 생성하는 부분.
+	var keyword = JSON.parse(data);
+	var selectedKeyword;
+	var nodes = myDiagram.nodes;
+	while(nodes.hasNext()){
+		if(nodes.value.isSelected){
+			selectedKeyword=nodes.value;
+			console.log(selectedKeyword);
+			console.log(selectedKeyword.data);
+		}
+	}
+	jQuery.ajax( 
+	{
+		url : "/keyword/changeKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : selectedKeyword.data.key,
+			treeNo : selectedKeyword.data.treeNo,
+			keyword : keyword.keyword,
+			copyNo : keyword.copyNo,
+			parent : selectedKeyword.data.parent,
+			collapse : 0,
+			color : keyword.color
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+			//복사가 성공하면...
+			//기존 데이터 삭제...
+			//console.log(JSONData);
+			var childList = selectedKeyword.findTreeChildrenNodes();
+			while(childList.hasNext()){
+				console.log(childList.value.data);
+				removeKeyword(childList.value);
+			}
+			selectedKeyword.data.keyword = keyword.keyword;
+			selectedKeyword.data.copyNo = keyword.copyNo;
+			selectedKeyword.data.collapse = 0;
+			selectedKeyword.data.color = keyword.color
+			console.log("뭥미"+selectedKeyword.data);
+			//노드의 keyword 변경.
+			//console.log(JSONData.keyword);
+			//var model = myDiagram.model;
+			//var parent = myDiagram.findNodeForData(selectedKeyword.data);
+			// add to model.nodeDataArray and create a Node
+			//model.addNodeData(JSONData.keyword);
+			// position the new child node close to the parent
+			//var child = myDiagram.findNodeForData(JSONData.keyword);
+			//child.location = parent.location;
+			selectedKeyword.findObject("button2").source = "resources/img/btn_expanded.png";
+			//console.log("panel "+selectedKeyword.findObject("PANEL"));
+			//selectedKeyword.findObject("PANEL").text = keyword.keyword;
+			selectedKeyword.isTreeExpanded = false;
+		}
+	})
+}
+
+function updateKeyword(keyword) { // 노드를 생성하는 부분.
+	jQuery.ajax( 
+	{
+		url : "/keyword/updateKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : keyword.key,
+			treeNo : keyword.treeNo,
+			keyword : keyword.keyword,
+			copyNo : keyword.copyNo,
+			parent : keyword.parent,
+			collapse : keyword.collapse,
+			color : keyword.color
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+		}
+	})
+}
+
+function removeKeyword(node) { // 노드를 생성하는 부분.
+	var childList = node.findTreeChildrenNodes();
+	while(childList.hasNext()){
+		console.log(childList.value.data);
+		removeKeyword(childList.value);
+	}
+	var keyword = node.data;
+	jQuery.ajax( 
+	{
+		url : "/keyword/removeKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : keyword.key,
+			treeNo : keyword.treeNo,
+			keyword : keyword.keyword,
+			copyNo : keyword.copyNo,
+			parent : keyword.parent,
+			collapse : keyword.collapse,
+			color : keyword.color
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+			console.log("remove data :: "+keyword);
+			myDiagram.model.removeNodeData(keyword);
+		}
+	})
+}
+
+function allExpanded() {
+	var nodes = myDiagram.nodes;
+	while (nodes.hasNext()) {
+		nodes.value.isTreeExpanded = true;
+		if (nodes.value.data.collapse == 1) {
+			nodes.value.findObject("button2").source = "resources/img/btn_collapse.png";
+		}
+	}
+	var nodes = myDiagram.nodes;
+	while (nodes.hasNext()) {
+		if (nodes.value.data.collapse == 0) {
+			nodes.value.isTreeExpanded = false;
+			nodes.value.findObject("button2").source = "resources/img/btn_expanded.png";
+		}
+	}
+}
+
+function createInput() {
+	var customText = document.getElementById("inputText");
+	customText.onActivate = function() {
+		customText.style.visibility = "";
+		var startingValue = customText.textEditingTool.textBlock.text;
+		customText.value = startingValue;
+
+		
+		var loc = customText.textEditingTool.textBlock.getDocumentPoint(go.Spot.TopLeft);
+		var loc2 = customText.textEditingTool.textBlock.getDocumentPoint(go.Spot.BottomRight);
+		var pos = myDiagram.transformDocToView(loc);
+		var pos2 = myDiagram.transformDocToView(loc2);
+		customText.style.left = pos.x + "px";
+		customText.style.top = pos.y + "px";
+		customText.style.width =  (5 + pos2.x - pos.x) + "px";
+		customText.style.height = (5 + pos2.y - pos.y) + "px";
+		customText.style.padding = 1;
+		customText.style.fontSize = (( pos2.y - pos.y)*0.6) + "pt";
+		customText.style.fontSizeAdjust="0.58";
+		customText.style.display ="block";
+	}
+	
+	customText.addEventListener("keydown", function(e) {
+		var keynum = e.which;
+		var tool = customText.textEditingTool;
+		if (tool === null)
+			return;
+		if (keynum == 13) { // Accept on Enter
+			tool.acceptText(go.TextEditingTool.Enter);
+			//console.log(tool.diagram.nodeTemplate.findMainElement().data);
+			selectKeyword.data.keyword = customText.value;
+			setKeyword(selectKeyword.data.keyword);
+			updateKeyword(selectKeyword.data);
+			e.preventDefault();
+			return false;
+		} else if (keynum == 9) { // Accept on Tab
+			tool.acceptText(go.TextEditingTool.Tab);
+			e.preventDefault();
+			return false;
+		} else if (keynum === 27) { // Cancel on Esc
+			tool.doCancel();
+			if (tool.diagram)
+				tool.diagram.focus();
+		}
+	}, false);
+	return customText;
+}
+
+function listOnwerChildKeyword(node){
+	//find owner User keyword (user + tree + parentkey)
+	//있나? copy.
+	//node의 owner를 현제 유저로 set
+	console.log("what"+JSON.stringify(node.data));
+	jQuery.ajax( 
+	{
+		url : "/keyword/listOnwerChildKeyword" ,
+		method : "POST" ,
+		dataType : "json" ,
+		data: JSON.stringify({
+			key : node.data.key,
+			treeNo : node.data.treeNo,
+			copyNo : node.data.copyNo,
+			parent : node.data.key
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		success : function(JSONData , status) {
+			console.log(JSONData);
+			console.log(JSON.stringify(JSONData));
+			console.log(JSONData.list);
+			var keywordList = JSONData.list;
+			for(var i= 0 ; i < keywordList.length ; i++){
+				console.log("copying...");
+				//JSON.stringify(keywordList[i]));
+				model = myDiagram.model;
+				var parent = myDiagram.findNodeForData(node.data);
+				// add to model.nodeDataArray and create a Node
+				model.addNodeData(keywordList[i]);
+				// position the new child node close to the parent
+				var child = myDiagram.findNodeForData(keywordList[i]);
+				child.location = parent.location;
+			}
+			/*var model = myDiagram.model;
+			var parent = myDiagram.findNodeForData(selectedKeyword.data);
+			// add to model.nodeDataArray and create a Node
+			model.addNodeData(JSONData.keyword);
+			// position the new child node close to the parent
+			var child = myDiagram.findNodeForData(JSONData.keyword);
+			child.location = parent.location;
+
+			selectedKeyword.findObject("button2").source = "resources/img/btn_collapse.png";
+			selectedKeyword.isTreeExpanded = true;
+			selectedKeyword.data.collapse = 1;
+			updateKeyword(selectedKeyword.data);*/
+		}
+	})
+}
+
+/*function copyCreate(data){
+	var redata = JSON.parse(data);
+	redata.key = 0;
+	redata.treeNo = 0;
+	redata.parent = 0;
+	console.log("copyCreate : "+redata);
+	myDiagram.model.addNodeData(redata);
+}
+
+function copyRemove(data){
+	var redata = JSON.parse(data);
+	redata.key = 0;
+	redata.treeNo = 0;
+	redata.parent = 0;
+	console.log("copyRemove : "+redata);
+	
+	myDiagram.model.removeNodeData(myDiagram.model.findNodeDataForKey(0));
+}*/
+//
+
+/*
+// the expand/collapse button, at the top-right corner
+			gojs("TreeExpanderButton", {
 				name : "button1",
 				alignment : go.Spot.TopRight, // +- 오른쪽 상단에 배치
 				alignmentFocus : go.Spot.Center,
@@ -109,263 +576,13 @@ function goImpl() {
 					node.isTreeExpanded = !node.isTreeExpanded; // expand or collapse
 					diagram.commitTransaction("CollapseExpandTree"); // startTransaction
 				}
-			}),*/ // end TreeExpanderButton
-			gojs(go.Picture, {
-				name: "button1",
-				alignment : go.Spot.TopRight,
-				maxSize : new go.Size(20, 20),
-				source : "resources/img/btn_add.png",
-				visible : false,
-				click : function(e, obj) {
-					// openDialog();
-					var node = obj.part; // 버튼 오브젝트가 있는 노드를 받는다.
-					if (node === null)
-						return; // 노드가 없으면 끝낸다.
-					e.handled = true; // ??
-					var diagram = node.diagram; // 노드의 다이어 그램을 받는다.
-					diagram.startTransaction("	"); // 트랜젝션 시작... 중간에 오류가 나거나하면 롤백됨.
-					// this behavior is specific to this incrementalTree sample:
-					var data = node.data;
-					
-					createSubTree(data); // 트리생성
-
-					if(!obj.part.isTreeExpanded){
-						obj.part.findObject("button2").source = "resources/img/btn_collapse.png";
-						obj.part.isTreeExpanded = true;
-						obj.part.data.collapse = 1;
-						updateKeyword(obj.part.data);
-					}
-					
-					diagram.commitTransaction("CollapseExpandTree"); // startTransaction
-				}
 			}),
-			gojs(go.Picture, {
-				name: "button2",
-				alignment : go.Spot.BottomRight,
-				maxSize : new go.Size(20, 20),
-				source : "resources/img/btn_expanded.png",
-				visible : false,
-				click : function(e, obj) {
-					// openDialog();
-					if(obj.part.isTreeExpanded){
-						obj.source = "resources/img/btn_expanded.png";
-						obj.part.isTreeExpanded = false;
-						obj.part.data.collapse = 0;
-						updateKeyword(obj.part.data);
-					}else{
-						obj.source = "resources/img/btn_collapse.png";
-						obj.part.isTreeExpanded = true;
-						obj.part.data.collapse = 1;
-						updateKeyword(obj.part.data);
-					}
-				}
-			})
-			
-		); // end Node
-		
-		
-		
-		// create the model with a root node data
-		myDiagram.model = new go.TreeModel([ // 트리모델로 설정
-	     {
-	    	 key : 0,
-	    	 keyword : "키워드",
-	    	 color : "lightgreen",
-	    	 collapse : 0
-	     } // 초기 토드 추가
-	     ]);
-		/*
-		 * myDiagram.model = new go.TreeModel([ { key: 0, color: "lightgreen",
-		 * everExpanded: false } ]);
-		 */
-		myDiagram.layoutDiagram(true);
-		// myDiagram.model =
-		// go.Model.fromJson(document.getElementById("treeData").value);
-//	console.log(document.getElementById("treeData")); // 저장한 데이터 확인하는 부분...
-		// jsonData로 저장된 데이터를 model에 불러옴
-		myDiagram.model = go.Model
-//			.fromJson(document.getElementById("treeData").value);
-		.fromJson(success.Tree)
-//		console.log((success));
-		
-		myDiagram.model.addChangedListener(function(e) { // changeListener...
-			
-			if (e.isTransactionFinished) {
-				var tx = e.object;
-				if (tx instanceof go.Transaction && console) {
-					tx.changes.each(function(ea){
-						if (e.modelChange !== "nodeDataArray") return;
-					      // record node insertions and removals
-					      if (e.change === go.ChangedEvent.Insert) {
-					        console.log(evt.propertyName + " added node with key: " + e.newValue.key);
-					      } else if (e.change === go.ChangedEvent.Remove) {
-					        console.log(evt.propertyName + " removed node with key: " + e.oldValue.key);
-					      }
-					});
-					console.log(tx.toString());
-					tx.changes.each(function(c) {
-						// consider which ChangedEvents to record
-						if (c.model)
-							console.log("  " + c.toString());
-					});
-				}
-			}
-		});
-		
-		myDiagram.addDiagramListener("TextEdited", function(e) {
-		});
-		// console.log(myDiagram.model);
-		allExpanded();
-		myDiagram.toolManager.textEditingTool.defaultTextEditor = createInput();
-		
-	})
-	
-	
-}
-
-// This dynamically creates the immediate children for a node.
-// The sample assumes that we have no idea of whether there are any children
-// for a node until we look for them the first time, which happens
-// upon the first tree-expand of a node.
-function createSubTree(parentdata) { // 노드를 생성하는 부분.
-	jQuery.ajax( 
-	{
-		url : "/keyword/addKeyword" ,
-		method : "POST" ,
-		dataType : "json" ,
-		data: JSON.stringify({
-			key : 0,
-			treeNo : 1000000,
-			keyword : "키워드",
-			ownerUserNo : 1000000,
-			parent : parentdata.key,
-			collapse : 0,
-			color : go.Brush.randomColor()
-		}),
-		headers : {
-			"Accept" : "application/json",
-			"Content-Type" : "application/json"
-		},
-		success : function(JSONData , status) {
-			console.log(JSONData.keyword);
-			var model = myDiagram.model;
-			var parent = myDiagram.findNodeForData(parentdata);
-			// add to model.nodeDataArray and create a Node
-			model.addNodeData(JSONData.keyword);
-			// position the new child node close to the parent
-			var child = myDiagram.findNodeForData(JSONData.keyword);
-			child.location = parent.location;
-			
-			parentdata.collapse = 1;
-			updateKeyword(parentdata);
-		}
-	})
-}
-
-function updateKeyword(keyword) { // 노드를 생성하는 부분.
-	jQuery.ajax( 
-	{
-		url : "/keyword/updateKeyword" ,
-		method : "POST" ,
-		dataType : "json" ,
-		data: JSON.stringify({
-			key : keyword.key,
-			treeNo : keyword.treeNo,
-			keyword : keyword.keyword,
-			ownerUserNo : keyword.ownerUserNo,
-			parent : keyword.parent,
-			collapse : keyword.collapse,
-			color : keyword.color
-		}),
-		headers : {
-			"Accept" : "application/json",
-			"Content-Type" : "application/json"
-		},
-		success : function(JSONData , status) {
-		}
-	})
-}
-
-function save() {
-	document.getElementById("mySavedModel").value = myDiagram.model
-			.toJson();
-	myDiagram.isModified = false;
-}
-function load() {
-	myDiagram.model = go.Model.fromJson(document
-			.getElementById("mySavedModel").value);
-}
-
-function allExpanded() {
-	var nodes = myDiagram.nodes;
-	while (nodes.hasNext()) {
-		if (nodes.value.data.collapse == 1) {
-			nodes.value.isTreeExpanded = !nodes.value.isTreeExpanded;
-			nodes.value.findObject("button2").source = "resources/img/btn_collapse.png";
-		}
-	}
-}
-
-function createInput() {
-	var customText = document.getElementById("inputText");
-	customText.onActivate = function() {
-		customText.style.visibility = "";
-		var startingValue = customText.textEditingTool.textBlock.text;
-
-		// Finish immediately when a radio button is pressed
-		/*
-		 * var onClick = function(e) { var tool = customText.textEditingTool; if
-		 * (tool === null) return; tool.acceptText(go.TextEditingTool.Tab); }
-		 */
-		customText.value = startingValue;
-		
-		// Do a few different things when a user presses a key
-		var loc = customText.textEditingTool.textBlock.getDocumentPoint(go.Spot.TopLeft);
-		var loc2 = customText.textEditingTool.textBlock.getDocumentPoint(go.Spot.BottomRight);
-		var pos = myDiagram.transformDocToView(loc);
-		var pos2 = myDiagram.transformDocToView(loc2);
-		customText.style.left = pos.x + "px";
-		customText.style.top = pos.y + "px";
-		customText.style.width =  (5 + pos2.x - pos.x) + "px";
-		customText.style.height = (5 + pos2.y - pos.y) + "px";
-		customText.style.padding = 1;
-		customText.style.fontSize = (( pos2.y - pos.y)*0.6) + "pt";
-		customText.style.fontSizeAdjust="0.58";
-		customText.style.display ="block";
-	}
-	/*customText.addEventListener("input", function() {
-		var tool = this.textEditingTool, c = tool.textBlock;
-		c.text = this.value;
-		var d = this.yI;
-		// Ph(c, a.Eg.Bu, Infinity);
-		this.style.width = 20 + c.Aa.width * d + "px";
-		this.style.height = 10 + c.Aa.height * d + "px";
-		this.rows = c.rH
-	}, !1);*/
-	
-	customText.addEventListener("keydown", function(e) {
-		var keynum = e.which;
-		var tool = customText.textEditingTool;
-		if (tool === null)
-			return;
-		if (keynum == 13) { // Accept on Enter
-			tool.acceptText(go.TextEditingTool.Enter);
-			//console.log(tool.diagram.nodeTemplate.findMainElement().data);
-			selectKeyword.data.keyword = customText.value;
-			updateKeyword(selectKeyword.data);
-			e.preventDefault();
-			return false;
-		} else if (keynum == 9) { // Accept on Tab
-			tool.acceptText(go.TextEditingTool.Tab);
-			e.preventDefault();
-			return false;
-		} else if (keynum === 27) { // Cancel on Esc
-			tool.doCancel();
-			if (tool.diagram)
-				tool.diagram.focus();
-		}
-	}, false);
-	return customText;
-}
-
-//findTreeChildrenNodes() 
+mouseDragEnter
+mouseDragLeave
+mouseDrop
+mouseEnter
+mouseHold
+mouseHover
+mouseLeave
+mouseOver
+*/

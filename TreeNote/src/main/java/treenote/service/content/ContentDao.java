@@ -13,6 +13,8 @@ public interface ContentDao {
 	public int updateScrapContent(int content) throws Exception;
 	//불러오기
 	public Content getContent(int contentNo) throws Exception;
+	//불러오기
+	public Content getContentKeywordNo(int keywordNo) throws Exception;
 	//복사
 	public Content copyContent(Content content) throws Exception; 
 }

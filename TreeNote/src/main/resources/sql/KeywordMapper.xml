@@ -8,7 +8,7 @@
 	<resultMap id="keywordSelectMap" type="keyword">
 		<result property="key" column="KEYWORD_NO" jdbcType="INTEGER"/>
 		<result property="treeNo" column="TREE_NO" jdbcType="INTEGER"/>
-		<result property="ownerUserNo" column="OWNER_USER_NO" jdbcType="INTEGER"/>
+		<result property="copyNo" column="COPY_NO" jdbcType="INTEGER"/>
 		<result property="keyword" column="KEYWORD" jdbcType="VARCHAR"/>
 		<result property="collapse" column="COLLAPSE" jdbcType="INTEGER"/>
 		<result property="parent" column="PARENT_KEYWORD_NO" jdbcType="INTEGER"/>
@@ -17,14 +17,14 @@
 	
 	<sql id="select-keywords">
 		SELECT
-		KEYWORD_NO, TREE_NO, OWNER_USER_NO, KEYWORD, COLLAPSE, PARENT_KEYWORD_NO, COLOR
+		KEYWORD_NO, TREE_NO, COPY_NO, KEYWORD, COLLAPSE, PARENT_KEYWORD_NO, COLOR
 		FROM KEYWORDS
 	</sql>
 	
 	<insert id="addKeyword" parameterType="keyword">
 		INSERT
 		INTO	KEYWORDS
-		VALUES( #{key}, #{treeNo}, #{ownerUserNo}, #{keyword}, #{collapse}, #{parent} , #{color})
+		VALUES( #{key}, #{treeNo}, #{copyNo}, #{keyword}, #{collapse}, #{parent} , #{color})
 	</insert>
 
 	<update id="updateKeyword" parameterType="keyword">
@@ -33,7 +33,7 @@
 			TREE_NO = #{treeNo}, 
 			KEYWORD = #{keyword}, 
 			COLLAPSE = #{collapse},
-			OWNER_USER_NO = #{ownerUserNo},
+			COPY_NO = #{copyNo},
 			PARENT_KEYWORD_NO = #{parent}, 
 			COLOR = #{color}
 		</set>
@@ -49,7 +49,7 @@
 		DELETE FROM KEYWORDS WHERE KEYWORD_NO = #{value}
 	</delete> 
 	
-	<select id="listTimeLineKeyword" parameterType="java.lang.String" resultMap="keywordSelectMap">
+	<select id="listSearchKeyword" parameterType="java.lang.String" resultMap="keywordSelectMap">
 		SELECT * FROM (SELECT ROWNUM rn, tv.* FROM (
 		<include refid="select-keywords"/>
 		WHERE KEYWORD = #{value} 
@@ -71,6 +71,10 @@
 		<include refid="select-keywords"/>
 		WHERE KEYWORD_NO = #{value} 
 	</select>
+	
+	<select id="autoComplete" resultType="java.lang.String">
+		SELECT DISTINCT KEYWORD FROM KEYWORDS
+	</select>
 <!-- 
 
 //추가
@@ -88,7 +92,7 @@
 CREATE TABLE KEYWORDS (
 	KEYWORD_NO INTEGER NOT NULL, /* 키워드일련번호 */
 	TREE_NO INTEGER NOT NULL, /* 트리일련번호 */
-	OWNER_USER_NO INTEGER NOT NULL, /* 이전회원일련번호 */
+	COPY_NO INTEGER NOT NULL, /* 이전회원일련번호 */
 	KEYWORD VARCHAR2(50) NOT NULL, /* 키워드 */
 	COLLAPSE INTEGER, /* 확장 */
 	PARENT_KEYWORD_NO INTEGER /* 부모키워드일련번호 */
@@ -96,7 +100,7 @@ CREATE TABLE KEYWORDS (
 public class Keyword {
 	private int keywordNo;
 	private int treeNo;
-	private int ownerUserNo;
+	private int copyNo;
 	private String keyword;
 	private boolean collapse;
 	private int parentNo;

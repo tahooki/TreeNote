@@ -11,7 +11,7 @@ package treenote.domain;
 public class Keyword {
 	private int key;
 	private int treeNo;
-	private int ownerUserNo;
+	private int copyNo;
 	private String keyword;
 	private int collapse;
 	private int parent;
@@ -40,13 +40,13 @@ public class Keyword {
 	public void setTreeNo(int treeNo) {
 		this.treeNo = treeNo;
 	}
-
-	public int getOwnerUserNo() {
-		return ownerUserNo;
+	
+	public int getCopyNo() {
+		return copyNo;
 	}
 
-	public void setOwnerUserNo(int ownerUserNo) {
-		this.ownerUserNo = ownerUserNo;
+	public void setCopyNo(int copyNo) {
+		this.copyNo = copyNo;
 	}
 
 	public String getKeyword() {
@@ -75,10 +75,8 @@ public class Keyword {
 
 	@Override
 	public String toString() {
-		return "Keyword [key=" + key + ", treeNo=" + treeNo + ", ownerUserNo=" + ownerUserNo + ", keyword=" + keyword
+		return "Keyword [key=" + key + ", treeNo=" + treeNo + ", copyNo=" + copyNo + ", keyword=" + keyword
 				+ ", collapse=" + collapse + ", parent=" + parent + ", color=" + color + "]";
 	}
-
-	
 
 }

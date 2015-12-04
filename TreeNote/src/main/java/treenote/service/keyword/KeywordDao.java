@@ -15,12 +15,15 @@ public interface KeywordDao {
 	public List<Keyword> listTreeKeyword(int treeNo) throws Exception;
 	//해당 키워드 리스트 불러오기
 	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception;
-	//복사
-	public Keyword copyKeyword(Keyword keyword) throws Exception; 
+	//해당 키워드 리스트 불러오기
+	public List<Keyword> listSearchKeyword(String keyword) throws Exception;
 	//자식 키워드 불러오기
 	public List<Keyword> listChildKeyword(int keywordNo) throws Exception;
 	
 	public Keyword getKeyword(int keywordNo) throws Exception;
 	
 	public int getKeywrodNo() throws Exception;
+	
+	//자동완성
+	public List<String> autoComplete() throws Exception; 
 }

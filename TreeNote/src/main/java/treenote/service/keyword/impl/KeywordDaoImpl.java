@@ -52,21 +52,21 @@ public class KeywordDaoImpl implements KeywordDao {
 	}
 
 	@Override
-	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception {
+	public List<Keyword> listSearchKeyword(String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("keywordMapper.listTimeLineKeyword", keyword);
-	}
-
-	@Override
-	public Keyword copyKeyword(Keyword keyword) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("keywordMapper.listSearchKeyword", keyword);
 	}
 
 	@Override
 	public List<Keyword> listChildKeyword(int keywordNo) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("keywordMapper.listTimeLineKeyword", keywordNo);
+		return sqlSession.selectList("keywordMapper.listChildKeyword", keywordNo);
+	}
+	
+	@Override
+	public List<Keyword> listTimeLineKeyword(String keyword) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -78,8 +78,13 @@ public class KeywordDaoImpl implements KeywordDao {
 	@Override
 	public int getKeywrodNo() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("??");
 		return sqlSession.selectOne("keywordMapper.getKeywordNo");
 	}
-	
+
+	@Override
+	public List<String> autoComplete() throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("keywordMapper.autoComplete");
+	}
+
 }

@@ -59,4 +59,10 @@ public class ContentDaoImpl implements ContentDao {
 		return null;
 	}
 
+	@Override
+	public Content getContentKeywordNo(int keywordNo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

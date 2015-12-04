@@ -2,6 +2,7 @@ package treenote.domain;
 
 public class User {
 	private int userNo;
+	private int editTreeNo;
 	private String email;
 	private String password;
 	private String name;
@@ -15,6 +16,14 @@ public class User {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+
+	public int getEditTreeNo() {
+		return editTreeNo;
+	}
+
+	public void setEditTreeNo(int editTreeNo) {
+		this.editTreeNo = editTreeNo;
 	}
 
 	public String getEmail() {
@@ -57,8 +66,6 @@ public class User {
 		this.photo = photo;
 	}
 
-	
-
 	public String getSnsUser() {
 		return snsUser;
 	}
@@ -69,10 +76,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userNo=" + userNo + ", email=" + email + ", password=" + password + ", name=" + name + ", phone="
-				+ phone + ", photo=" + photo + ", snsUser=" + snsUser + "]";
+		return "User [userNo=" + userNo + ", editTreeNo=" + editTreeNo + ", email=" + email + ", password=" + password
+				+ ", name=" + name + ", phone=" + phone + ", photo=" + photo + ", snsUser=" + snsUser + "]";
 	}
-	
-	
-	
+
 }
