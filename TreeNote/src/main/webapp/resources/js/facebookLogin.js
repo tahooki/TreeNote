@@ -28,7 +28,7 @@
         //console.log(response); // dump complete info
         var access_token = response.authResponse.accessToken; //get access token
         var user_id = response.authResponse.userID; //get FB UID
-       
+        facebookLogin();
        
         
     } else if (response.status === 'not_authorized') {
@@ -37,33 +37,33 @@
       // 페이스북을 통한 회원가입 창 유도
       // document.getElementById('status').innerHTML = 'Please log ' +
       //   'into this app.';
-    	alert("로그인 해")
+    
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
       // 페이스북 로그인 되어 있지 않아 현재 상태 파악 불가
       // 페이스북 로그인 창 생성
-      FB.login(function(response) {
-
-          if (response.authResponse) {
-              console.log('로그인 되었습니다.');
-              //console.log(response); // dump complete info
-              access_token = response.authResponse.accessToken; //get access token
-              user_id = response.authResponse.userID; //get FB UID
-
-              FB.api('/me', function(response) {
-                  user_email = response.email; //get user email
-            // you can store this data into your database             
-              });
-
-          } else {
-              //user hit cancel button
-              console.log('User cancelled login or did not fully authorize.');
-
-          }
-      }, {
-          scope: 'public_profile,email,user_about_me'
-      });
+//      FB.login(function(response) {
+//
+//          if (response.authResponse) {
+//              console.log('로그인 되었습니다.');
+//              //console.log(response); // dump complete info
+//              access_token = response.authResponse.accessToken; //get access token
+//              user_id = response.authResponse.userID; //get FB UID
+//
+//              FB.api('/me', function(response) {
+//                  user_email = response.email; //get user email
+//            // you can store this data into your database             
+//              });
+//
+//          } else {
+//              //user hit cancel button
+//              console.log('User cancelled login or did not fully authorize.');
+//
+//          }
+//      }, {
+//          scope: 'public_profile,email,user_about_me'
+//      });
     }
   }
 
