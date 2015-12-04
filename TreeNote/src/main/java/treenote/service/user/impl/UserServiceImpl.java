@@ -64,4 +64,9 @@ public class UserServiceImpl implements UserService {
 		
 		return returnUser;
 	}
+	
+	@Override
+	public User getUser2(String email) throws Exception{
+		return userDao.getLoginUser(email);
+	}
 }
